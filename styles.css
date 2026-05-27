@@ -52,11 +52,30 @@ label {
 
 input {
     width: 100%;
-    padding: 12px 40px 12px 12px;
+    padding: 12px;
     border: 2px solid #e0e0e0;
     border-radius: 6px;
     font-size: 14px;
     transition: border-color 0.3s ease;
+}
+
+input.has-currency {
+    padding-left: 36px;
+}
+
+input.has-unit {
+    padding-right: 36px;
+}
+
+/* remove native number input spinner controls */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type='number'] {
+    -moz-appearance: textfield;
 }
 
 input:focus {
@@ -65,10 +84,21 @@ input:focus {
     background-color: #f8f9ff;
 }
 
-.currency, .unit {
+.currency {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.unit {
     position: absolute;
     right: 12px;
-    top: 38px;
+    top: 50%;
+    transform: translateY(-50%);
     color: #999;
     font-size: 14px;
     pointer-events: none;
@@ -206,6 +236,14 @@ input:focus {
     padding: 10px;
 }
 
+.addition-entry input.has-currency {
+    padding-left: 36px;
+}
+
+.addition-entry input.has-unit {
+    padding-right: 36px;
+}
+
 .addition-entry label {
     margin: 0 0 6px 0;
     font-size: 12px;
@@ -223,8 +261,9 @@ input:focus {
 
 .addition-entry-field.currency-field .currency {
     position: absolute;
-    right: 10px;
-    bottom: 10px;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 13px;
 }
 
@@ -235,7 +274,8 @@ input:focus {
 .addition-entry-field.days-field .unit {
     position: absolute;
     right: 10px;
-    bottom: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 13px;
 }
 

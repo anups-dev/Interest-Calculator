@@ -45,6 +45,7 @@ function renderAdditionEntries() {
                 <label>Amount</label>
                 <input 
                     type="number" 
+                    class="has-currency"
                     placeholder="Enter amount" 
                     step="0.01"
                     value="${entry.amount}"
@@ -56,6 +57,7 @@ function renderAdditionEntries() {
                 <label>Day Added (day of month)</label>
                 <input 
                     type="number" 
+                    class="has-unit"
                     placeholder="Day added (1 - ${maxDay})" 
                     min="1"
                     max="${maxDay}"
