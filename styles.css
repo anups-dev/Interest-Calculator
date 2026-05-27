@@ -178,6 +178,133 @@ input:focus {
     border-color: #999;
 }
 
+.additions-section {
+    background: #f8f9ff;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 16px;
+}
+
+.additions-list {
+    margin-bottom: 12px;
+}
+
+.addition-entry {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 10px;
+    margin-bottom: 12px;
+    background: white;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    align-items: end;
+}
+
+.addition-entry input {
+    margin: 0;
+    padding: 10px;
+}
+
+.addition-entry label {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+}
+
+.addition-entry-field {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.addition-entry-field.currency-field {
+    position: relative;
+}
+
+.addition-entry-field.currency-field .currency {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 13px;
+}
+
+.addition-entry-field.days-field {
+    position: relative;
+}
+
+.addition-entry-field.days-field .unit {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 13px;
+}
+
+.delete-entry-btn {
+    padding: 10px 14px;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: fit-content;
+}
+
+.delete-entry-btn:hover {
+    background: #ff5252;
+    transform: scale(1.05);
+}
+
+.add-entry-btn {
+    width: 100%;
+    padding: 10px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.add-entry-btn:hover {
+    background: #764ba2;
+    transform: translateY(-1px);
+}
+
+.additions-results {
+    margin: 12px 0;
+}
+
+.addition-result-card {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.addition-result-card .result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.addition-result-label {
+    color: #666;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.addition-result-value {
+    color: #667eea;
+    font-size: 15px;
+    font-weight: 700;
+}
+
 @media (max-width: 600px) {
     .container {
         padding: 25px;
