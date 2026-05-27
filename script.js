@@ -56,7 +56,7 @@ function renderAdditionEntries() {
                 </div>
             </div>
             <div class="addition-entry-field days-field">
-                <label>Day Added</label>
+                <label>Date Added</label>
                 <div class="field-icon-wrapper">
                     <input 
                         type="number" 
