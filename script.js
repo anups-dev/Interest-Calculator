@@ -43,28 +43,31 @@ function renderAdditionEntries() {
         entryDiv.innerHTML = `
             <div class="addition-entry-field currency-field">
                 <label>Amount</label>
-                <input 
-                    type="number" 
-                    class="has-currency"
-                    placeholder="Enter amount" 
-                    step="0.01"
-                    value="${entry.amount}"
-                    onchange="updateEntry(${index}, 'amount', this.value)"
-                >
-                <span class="currency">${currencySymbol}</span>
+                <div class="field-icon-wrapper">
+                    <input 
+                        type="number" 
+                        class="has-currency"
+                        placeholder="Enter amount" 
+                        step="0.01"
+                        value="${entry.amount}"
+                        onchange="updateEntry(${index}, 'amount', this.value)"
+                    >
+                    <span class="currency">${currencySymbol}</span>
+                </div>
             </div>
             <div class="addition-entry-field days-field">
-                <label>Day Added (day of month)</label>
-                <input 
-                    type="number" 
-                    class="has-unit"
-                    placeholder="Day added (1 - ${maxDay})" 
-                    min="1"
-                    max="${maxDay}"
-                    value="${entry.dayAdded}"
-                    onchange="updateEntry(${index}, 'dayAdded', this.value)"
-                >
-                <span class="unit">day</span>
+                <label>Day Added</label>
+                <div class="field-icon-wrapper">
+                    <input 
+                        type="number" 
+                        class="has-unit"
+                        placeholder="Day added (1 - ${maxDay})" 
+                        min="1"
+                        max="${maxDay}"
+                        value="${entry.dayAdded}"
+                        onchange="updateEntry(${index}, 'dayAdded', this.value)"
+                    >
+                </div>
             </div>
             <button type="button" class="delete-entry-btn" onclick="removeEntry(${index})">Delete</button>
         `;
@@ -148,7 +151,7 @@ function calculateInterest() {
         resultCard.innerHTML = `
             <div class="result-item">
                 <span class="addition-result-label">
-                    Interest on ${currencySymbol}${result.amount.toFixed(2)} (added day ${result.dayAdded}) — ${result.days} days
+                    Interest on ${currencySymbol}${result.amount.toFixed(2)} (added date: ${result.dayAdded}) ( ${result.days} days)
                 </span>
                 <span class="addition-result-value">${currencySymbol}${result.interest.toFixed(2)}</span>
             </div>
