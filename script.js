@@ -1,11 +1,15 @@
-// Store all added principal entries
+// Currency symbol (change here if needed)
+const currencySymbol = '$';
+
+// Store all added principal entries (using dayAdded: day of month when added)
 let additionEntries = [
-    { amount: 5000, daysFromEnd: 15 }
+    // default: added on 16th in a 30-day month (equivalent to 15 days remaining)
+    { amount: 5000, dayAdded: 16 }
 ];
 
 // Add a new principal entry
 function addNewEntry() {
-    additionEntries.push({ amount: 1000, daysFromEnd: 15 });
+    additionEntries.push({ amount: 1000, dayAdded: 16 });
     renderAdditionEntries();
 }
 
@@ -19,8 +23,8 @@ function removeEntry(index) {
 function updateEntry(index, field, value) {
     if (field === 'amount') {
         additionEntries[index].amount = parseFloat(value) || 0;
-    } else if (field === 'daysFromEnd') {
-        additionEntries[index].daysFromEnd = parseInt(value) || 0;
+    } else if (field === 'dayAdded') {
+        additionEntries[index].dayAdded = parseInt(value) || 0;
     }
 }
 
@@ -32,30 +36,33 @@ function renderAdditionEntries() {
     additionEntries.forEach((entry, index) => {
         const entryDiv = document.createElement('div');
         entryDiv.className = 'addition-entry';
-        
+        // determine maximum day based on current totalDaysInMonth input (fallback to 31)
+        const totalDaysInput = document.getElementById('totalDaysInMonth');
+        const maxDay = totalDaysInput ? parseInt(totalDaysInput.value) || 31 : 31;
+
         entryDiv.innerHTML = `
-            <div class="addition-entry-field">
+            <div class="addition-entry-field currency-field">
                 <label>Amount</label>
                 <input 
                     type="number" 
                     placeholder="Enter amount" 
-                    step="0.1"
+                    step="0.01"
                     value="${entry.amount}"
                     onchange="updateEntry(${index}, 'amount', this.value)"
                 >
-                <span class="currency">₹</span>
+                <span class="currency">${currencySymbol}</span>
             </div>
             <div class="addition-entry-field days-field">
-                <label>Days Until End of Month</label>
+                <label>Day Added (day of month)</label>
                 <input 
                     type="number" 
-                    placeholder="Days" 
+                    placeholder="Day added (1 - ${maxDay})" 
                     min="1"
-                    max="31"
-                    value="${entry.daysFromEnd}"
-                    onchange="updateEntry(${index}, 'daysFromEnd', this.value)"
+                    max="${maxDay}"
+                    value="${entry.dayAdded}"
+                    onchange="updateEntry(${index}, 'dayAdded', this.value)"
                 >
-                <span class="unit">days</span>
+                <span class="unit">day</span>
             </div>
             <button type="button" class="delete-entry-btn" onclick="removeEntry(${index})">Delete</button>
         `;
@@ -89,12 +96,12 @@ function calculateInterest() {
 
     // Validate all entries
     for (let i = 0; i < additionEntries.length; i++) {
-        if (!additionEntries[i].amount || !additionEntries[i].daysFromEnd) {
-            alert(`Entry ${i + 1}: Please fill in both amount and days`);
+        if (!additionEntries[i].amount || !additionEntries[i].dayAdded) {
+            alert(`Entry ${i + 1}: Please fill in both amount and day added`);
             return;
         }
-        if (additionEntries[i].daysFromEnd > totalDaysInMonth) {
-            alert(`Entry ${i + 1}: Days cannot exceed total days in month`);
+        if (additionEntries[i].dayAdded < 1 || additionEntries[i].dayAdded > totalDaysInMonth) {
+            alert(`Entry ${i + 1}: Day added must be between 1 and ${totalDaysInMonth}`);
             return;
         }
     }
@@ -105,17 +112,20 @@ function calculateInterest() {
     // Interest on last principal for the full month
     const interestOnLast = (lastPrincipal * annualRate * totalDaysInMonth) / (365 * 100);
 
-    // Calculate interest for each addition
+    // Calculate interest for each addition (compute days remaining from dayAdded)
     let totalAddedInterest = 0;
     const additionsResults = [];
 
     additionEntries.forEach((entry, index) => {
-        const interestOnThisAddition = (entry.amount * annualRate * entry.daysFromEnd) / (365 * 100);
+        const daysRemaining = totalDaysInMonth - entry.dayAdded + 1; // inclusive of the day added
+        const actualDays = Math.max(0, daysRemaining);
+        const interestOnThisAddition = (entry.amount * annualRate * actualDays) / (365 * 100);
         totalAddedInterest += interestOnThisAddition;
         additionsResults.push({
             index: index,
             amount: entry.amount,
-            days: entry.daysFromEnd,
+            dayAdded: entry.dayAdded,
+            days: actualDays,
             interest: interestOnThisAddition
         });
     });
@@ -124,8 +134,8 @@ function calculateInterest() {
     const totalInterest = interestOnLast + totalAddedInterest;
 
     // Display results
-    document.getElementById('interestOnLast').textContent = '₹' + interestOnLast.toFixed(2);
-    
+    document.getElementById('interestOnLast').textContent = currencySymbol + interestOnLast.toFixed(2);
+
     // Display individual addition results
     const additionsResultsList = document.getElementById('additionsResultsList');
     additionsResultsList.innerHTML = '';
@@ -136,16 +146,16 @@ function calculateInterest() {
         resultCard.innerHTML = `
             <div class="result-item">
                 <span class="addition-result-label">
-                    Interest on ₹${result.amount.toFixed(2)} for ${result.days} days
+                    Interest on ${currencySymbol}${result.amount.toFixed(2)} (added day ${result.dayAdded}) — ${result.days} days
                 </span>
-                <span class="addition-result-value">₹${result.interest.toFixed(2)}</span>
+                <span class="addition-result-value">${currencySymbol}${result.interest.toFixed(2)}</span>
             </div>
         `;
         additionsResultsList.appendChild(resultCard);
     });
 
     // Display total
-    document.getElementById('totalInterest').textContent = '₹' + totalInterest.toFixed(2);
+    document.getElementById('totalInterest').textContent = currencySymbol + totalInterest.toFixed(2);
 
     // Show results section
     document.getElementById('results').classList.remove('hidden');
@@ -163,7 +173,7 @@ function resetForm() {
 
     // Reset entries
     additionEntries = [
-        { amount: 5000, daysFromEnd: 15 }
+        { amount: 5000, dayAdded: 16 }
     ];
     renderAdditionEntries();
 }
@@ -180,4 +190,10 @@ document.addEventListener('DOMContentLoaded', function() {
             calculateInterest();
         }
     });
+    
+    // Re-render entries when totalDaysInMonth changes so max/day placeholders update
+    const totalDaysInput = document.getElementById('totalDaysInMonth');
+    if (totalDaysInput) {
+        totalDaysInput.addEventListener('change', renderAdditionEntries);
+    }
 });
